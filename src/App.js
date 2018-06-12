@@ -9,7 +9,8 @@ class App extends Component {
       { name: "Ariel", age: 27 },
       { name: "Laura", age: 40 }
     ],
-    otherState: "some other value"
+    otherState: "some other value",
+    showPersons: false
   };
 
   switchNameHandler = newName => {
@@ -32,38 +33,52 @@ class App extends Component {
     });
   };
 
+  togglePersonsHandler = () => {
+    const doesShow = this.state.showPersons;
+    this.setState({ showPersons: !doesShow });
+  };
+
   render() {
     const style = {
       backgroundColor: "white",
       font: "inherit",
       border: "1px solid blue",
       padding: "8px",
-      cursor: 'pointer'
+      cursor: "pointer"
     };
+
+    let persons = null;
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          <Person
+            name={this.state.persons[0].name}
+            age={this.state.persons[0].age}
+          />
+          <Person
+            name={this.state.persons[1].name}
+            age={this.state.persons[1].age}
+            click={this.switchNameHandler.bind(this, "Max!")}
+            changed={this.nameChangedHandler}
+          >
+            My hobbies: Racing
+          </Person>
+          <Person
+            name={this.state.persons[2].name}
+            age={this.state.persons[2].age}
+          />
+        </div>
+      );
+    }
 
     return (
       <div className="App">
         <h1>Hi, I'm a react App</h1>
         <p>This is really working!</p>
-        <button style={style} onClick={() => this.switchNameHandler("Test")}>
-          Switch name
+        <button style={style} onClick={this.togglePersonsHandler}>
+          Toogle persons
         </button>
-        <Person
-          name={this.state.persons[0].name}
-          age={this.state.persons[0].age}
-        />
-        <Person
-          name={this.state.persons[1].name}
-          age={this.state.persons[1].age}
-          click={this.switchNameHandler.bind(this, "Max!")}
-          changed={this.nameChangedHandler}
-        >
-          My hobbies: Racing
-        </Person>
-        <Person
-          name={this.state.persons[2].name}
-          age={this.state.persons[2].age}
-        />
+        {persons}
       </div>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'H1, I\'m a React App'));
